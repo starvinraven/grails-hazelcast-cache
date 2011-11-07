@@ -1,0 +1,15 @@
+<plugin name='hazelcast' version='0.1' grailsVersion='2.0 &gt; *'>
+  <author>Esa Virtanen</author>
+  <authorEmail>esa@everholt.org</authorEmail>
+  <title>Hazelcast Caching Plugin</title>
+  <description>Provides simple abstraction for caching content using Hazelcast.
+</description>
+  <documentation>http://grails.org/plugin/hazelcast</documentation>
+  <type>HazelcastGrailsPlugin</type>
+  <resources>
+    <resource>BootStrap</resource>
+    <resource>hazelcast.CacheService</resource>
+  </resources>
+  <dependencies />
+  <behavior />
+</plugin>
