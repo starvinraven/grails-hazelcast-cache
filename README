@@ -1,0 +1,44 @@
+This is a simple plugin that wraps the Hazelcast distributed maps in a Grails service,
+enabling relatively easy caching.
+
+To use:
+
+Create an enum containing your cached map configuration in yourproject/src/groovy/yourproject/CachedMaps.groovy:
+
+enum CachedMaps {
+        MY_CACHE( [ timeToLiveSeconds: 30 ] ),
+	MY_OTHER_CACHE( [ timeToLiveSeconds: 300 ] )
+
+        def config
+        final def defaultConfig = [ timeToLiveSeconds: 60, backupCount: 0 ]
+
+        public CachedMaps(def config) {
+                this.config = defaultConfig + config
+        }
+}
+
+.. and add a reference to this enum in your Config.groovy:
+
+hazelcast.cache.maps = yourproject.CachedMaps
+
+Now, you can use cacheService to do cache lookups/pushes e.g. in your service classes:
+
+def cacheService
+def otherService
+
+def methodUsingCachedData() {
+	// check cache, if element with given key is found, return it
+	cacheService.checkCache(CachedMaps.MY_CACHE, "cacheKey") {
+		// if not, execute this closure, and store the returned value cache.
+		// note that the closure for the cache key is blocking, and only
+		// one cluster member will execute it at once. 
+		otherService.expensiveOperation()
+	}
+}
+
+
+TODO: 
+	- better configuration (including wrappers for Hazelcast network config etc.)
+	- caching e.g. responses and service methods via annotations
+
+
